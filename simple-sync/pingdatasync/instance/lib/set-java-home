@@ -1,0 +1,433 @@
+#!/bin/sh
+
+# A base64-encoded MD5 digest of the properties file used to
+# generate these settings
+PROPERTIES_FILE_MD5="er4KkyBvcsvXFEJYuufYmw=="
+export PROPERTIES_FILE_MD5
+
+# Allow the user to override the Java home and JVM
+# arguments using environment variables
+PRIVATE_UNBOUNDID_JAVA_BIN="${UNBOUNDID_JAVA_BIN}"
+PRIVATE_UNBOUNDID_JAVA_HOME="${UNBOUNDID_JAVA_HOME}"
+PRIVATE_UNBOUNDID_JAVA_ARGS="${UNBOUNDID_JAVA_ARGS}"
+PRIVATE_UNBOUNDID_COMMON_JAVA_ARGS="${UNBOUNDID_COMMON_JAVA_ARGS}"
+export PRIVATE_UNBOUNDID_JAVA_BIN PRIVATE_UNBOUNDID_JAVA_HOME UNBOUNDID_JAVA_ARGS \
+  PRIVATE_UNBOUNDID_COMMON_JAVA_ARGS
+
+# If common Java arguments were not specified then use known good values.
+if test -z "${PRIVATE_UNBOUNDID_COMMON_JAVA_ARGS}"
+then
+  PRIVATE_UNBOUNDID_COMMON_JAVA_ARGS="-Djdk.lang.Process.launchMechanism=POSIX_SPAWN --add-opens java.base/java.io=ALL-UNNAMED --add-opens java.base/java.lang=ALL-UNNAMED --add-opens java.base/java.lang.invoke=ALL-UNNAMED --add-opens java.base/java.lang.reflect=ALL-UNNAMED --add-opens java.base/java.security=ALL-UNNAMED --add-opens java.base/java.text=ALL-UNNAMED --add-opens java.base/java.util=ALL-UNNAMED --add-opens java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens java.desktop/java.awt.font=ALL-UNNAMED --add-opens java.management/sun.management=ALL-UNNAMED"
+fi
+
+# See if the environment variables for java home are set
+# in the path and try to figure it out.
+if test ! -f "${PRIVATE_UNBOUNDID_JAVA_BIN}"
+then
+  if test ! -d "${PRIVATE_UNBOUNDID_JAVA_HOME}"
+  then
+    TEMP="/opt/java/bin/java"
+    if test -f ${TEMP}
+    then
+      PRIVATE_UNBOUNDID_JAVA_BIN=${TEMP}
+      export PRIVATE_UNBOUNDID_JAVA_BIN
+    fi
+  else
+    PRIVATE_UNBOUNDID_JAVA_BIN=${PRIVATE_UNBOUNDID_JAVA_HOME}/bin/java
+    export PRIVATE_UNBOUNDID_JAVA_BIN
+  fi
+fi
+
+# See if the environment variables for arguments are set.
+if test -z "${PRIVATE_UNBOUNDID_JAVA_ARGS}"
+then
+  if test "${SCRIPT_NAME}" = "audit-data-security"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx256m -Xms256m -XX:+UseParallelGC"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "authrate"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "backup.offline"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx512m -Xms512m -XX:+UseParallelGC"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "backup.online"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx512m -Xms512m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "base64"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "collect-support-data"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx1g"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "config-diff"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx512m -Xms512m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "create-rc-script"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "create-systemd-script"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "dbtest"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx512m -Xms512m -XX:+UseParallelGC"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "deliver-one-time-password"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "deliver-password-reset-token"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "dsconfig"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "dsjavaproperties"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "dsreplication"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx512m -Xms512m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "dump-dns"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "encode-password"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "encrypt-file"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "encryption-settings"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx256m -Xms256m -XX:+UseParallelGC"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "enter-lockdown-mode"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "export-ldif.offline"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx512m -Xms512m -XX:+UseParallelGC -XX:NewRatio=8 -XX:+HeapDumpOnOutOfMemoryError"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "export-ldif.online"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "export-reversible-passwords"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx512m -Xms512m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "extract-data-recovery-log-changes"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx512m -Xms512m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "generate-totp-shared-secret"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx512m -Xms512m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "identify-references-to-missing-entries"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "identify-unique-attribute-conflicts"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "import-ldif.offline"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx768m -Xms768m -XX:+UseParallelGC -XX:NewRatio=8 -XX:+UseNUMA -XX:+HeapDumpOnOutOfMemoryError"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "import-ldif.online"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "indent-ldap-filter"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "ldap-debugger"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "ldap-diff"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx512m -Xms512m -XX:+UseParallelGC"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "ldap-result-code"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "ldapcompare"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "ldapdelete"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "ldapmodify"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "ldappasswordmodify"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "ldapsearch"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "ldif-diff"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xms512m -Xmx512m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "ldifmodify"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx512m -Xms512m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "ldifsearch"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx512m -Xms512m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "leave-lockdown-mode"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "list-backends"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "load-ldap-schema-file"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "make-ldif"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx512m -Xms512m -XX:+UseParallelGC"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "manage-account"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx512m -Xms512m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "manage-certificates"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "manage-extension"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "manage-profile"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx512m -Xms512m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "manage-tasks"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "manage-topology"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx512m -Xms512m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "migrate-ldap-schema"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "migrate-sun-ds-config"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "modrate"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "move-subtree"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "oid-lookup"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "parallel-update"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx512m -Xms512m -XX:+UseParallelGC"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "populate-composed-attribute-values"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "profile-viewer"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "re-encode-entries"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "rebuild-index.offline"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx768m -Xms768m -XX:+UseParallelGC -XX:NewRatio=8 -XX:+UseNUMA -XX:+HeapDumpOnOutOfMemoryError"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "rebuild-index.online"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "register-yubikey-otp-device"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "reload-http-connection-handler-certificates"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "remove-attribute-type-from-schema"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "remove-backup"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "remove-defunct-server"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "replace-certificate"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "restore.offline"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx512m -Xms512m -XX:+UseParallelGC"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "restore.online"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx512m -Xms512m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "review-license"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "rotate-log"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "sanitize-log"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx512m -Xms512m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "schedule-exec-task"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "search-and-mod-rate"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "search-logs"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "searchrate"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "server-state"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "set-delegated-admin-aci"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "setup"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "start-server"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx768m -Xms768m -XX:MaxNewSize=64m -XX:NewSize=64m -XX:+UseBiasedLocking -XX:-OmitStackTraceInFastThrow -XX:RefDiscoveryPolicy=1 -XX:MaxTenuringThreshold=2 -XX:+HeapDumpOnOutOfMemoryError -Djdk.tls.ephemeralDHKeySize=2048 -Djava.security.egd=file:/dev/./urandom -Djdbc.drivers=com.microsoft.sqlserver.jdbc.SQLServerDriver -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=80 -XX:ConcGCThreads=1"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+    PRIVATE_UNBOUNDID_LOGGC_ARG="-Xlog:gc*:file=/opt/out/instance/logs/jvm/gc.log:time,uptime,level,tags:filecount=3,filesize=100m"
+    export PRIVATE_UNBOUNDID_LOGGC_ARG
+  elif test "${SCRIPT_NAME}" = "start-server.precheck"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx64m -Xms64m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "status"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "stop-server"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "subtree-accessibility"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "sum-file-sizes"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "summarize-access-log"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "transform-ldif"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "uninstall"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "validate-acis"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "validate-file-signature"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "validate-ldap-schema"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "validate-ldif"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "verify-index"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-server -Xmx512m -Xms512m -XX:+UseParallelGC"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  elif test "${SCRIPT_NAME}" = "watch-entry"
+  then
+    PRIVATE_UNBOUNDID_JAVA_ARGS="-client -Xmx256m -Xms256m"
+    export PRIVATE_UNBOUNDID_JAVA_ARGS
+  fi
+fi
+
+# Append arguments that are common to all tools, if any.
+if test ! -z "${PRIVATE_UNBOUNDID_COMMON_JAVA_ARGS}"
+then
+  PRIVATE_UNBOUNDID_JAVA_ARGS="${PRIVATE_UNBOUNDID_JAVA_ARGS} ${PRIVATE_UNBOUNDID_COMMON_JAVA_ARGS}"
+fi

@@ -1,0 +1,199 @@
+arguments:
+  - id: productType
+    type: string
+    defaultValue: PingDirectory
+    configuration:
+      longIdentifier: productType
+      description: "The Ping Product to collect data for"
+  - id: serverRootArg
+    type: string
+    configuration:
+      shortIdentifier: R
+      longIdentifier: serverRoot
+      isRequired: false
+      maxOccurrences: 1
+      description: test
+  - id: noLdap
+    type: boolean
+    configuration:
+      longIdentifier: noLdap
+      description: "Specify that no effort should be made to collect any information over LDAP. This option should be used only as a last resort if the server is completely unresponsive or will not start"
+  - id: ldapHost
+    type: string
+    defaultValue: localhost
+    configuration:
+      shortIdentifier: h
+      longIdentifier: ldapHost
+      description: "The IP address or resolvable name to use to connect to the directory server.  If this is not provided, then a default value of 'localhost' will be used."
+  - id: ldapPort
+    type: integer
+    defaultValue: 389
+    configuration:
+      shortIdentifier: p
+      longIdentifier: ldapPort
+      description: "The port to use to connect to the directory server.  If this is not provided, then a default value of 389 will be used."
+  - id: bindDN
+    type: dn
+    configuration:
+      shortIdentifier: D
+      longIdentifier: bindDN
+      description: "The DN to use to bind to the directory server when performing simple authentication."
+  - id: bindPassword
+    type: string
+    configuration:
+      shortIdentifier: w
+      longIdentifier: bindPassword
+      description: "The password to use to bind to the directory server when performing simple authentication or a password-based SASL mechanism."
+  - id: useSSL
+    type: boolean
+    configuration:
+      shortIdentifier: Z
+      longIdentifier: useSSL
+      description: "Use SSL when communicating with the directory server."
+  - id: collectReplicationStateDump
+    type: boolean
+    defaultValue: false
+    configuration:
+      longIdentifier: collectReplicationStateDump
+      description: "Run the replication state dump task against the server and collect the
+                        output.  This is not done by default because the resulting file may be
+                        several megabytes in size.  LDAP connection is required to collect this
+                        data"
+  - id: securityLevel
+    type: string
+    defaultValue: obscure-secrets
+    configuration:
+      longIdentifier: securityLevel
+      description: "By default this tool takes many precautions to avoid collecting sensitive
+                        information, including only gathering information from a specific list of
+                        files and removing sensitive data regardless of where it appears.  Log file
+                        snippets, stack traces, and server monitoring data can include a small
+                        amount of personally identifiable information in the form of LDAP DNs and
+                        search filters.  By specifying a value of 'maximum' for this property, this
+                        tool will take steps to remove this information from the collected data.
+                        This should only be used when necessary, as it reduces the information
+                        available in the archive and can increase the time to find the source of
+                        support issues"
+  - id: archiveExtensionSource
+    type: boolean
+    configuration:
+      longIdentifier: archiveExtensionSource
+      description: "Specify that the tool should archive the source code of any extensions
+                    installed on the server"
+  - id: trustAll
+    type: boolean
+    configuration:
+      longIdentifier: trustAll
+      description: "Trust any certificate presented by the directory server."
+  - id: useInternalConnection
+    type: boolean
+    defaultValue: false
+    configuration:
+      longIdentifier: useInternalConnection
+      description: "Use an internal connection to retrieve information from the server"
+  - id: bindPasswordFile
+    type: file
+    configuration:
+      longIdentifier: bindPasswordFile
+      description: "The path to the file containing the password to use to bind to
+                        the directory server when performing simple authentication or a
+                        password-based SASL mechanism."
+  - id: useStartTLS
+    type: boolean
+    configuration:
+      longIdentifier: useStartTLS
+      description: "Use StartTLS when communicating with the directory server."
+  - id: keyStorePath
+    type: string
+    configuration:
+      longIdentifier: keyStorePath
+      description: "The path to the file to use as the key store for obtaining
+                        client certificates when communicating securely with the
+                        directory server."
+  - id: keyStorePassword
+    type: string
+    configuration:
+      longIdentifier: keyStorePassword
+      description: "The password to use to access the key store contents."
+
+  - id: keyStorePasswordFile
+    type: file
+    configuration:
+      longIdentifier: keyStorePasswordFile
+      description: "The path to the file containing the password to use to access
+                        the key store contents."
+  - id: trustStorePath
+    type: string
+    configuration:
+      longIdentifier: trustStorePath
+      description: "The path to the file to use as trust store when determining
+                        whether to trust a certificate presented by the directory
+                        server."
+  - id: trustStorePassword
+    type: string
+    configuration:
+      longIdentifier: trustStorePassword
+      description: "The password to use to access the trust store contents."
+  - id: trustStorePasswordFile
+    type: file
+    configuration:
+      longIdentifier: trustStorePasswordFile
+      description: "The path to the file containing the password to use to access
+                        the trust store contents."
+  - id: certificateNickname
+    type: string
+    configuration:
+      longIdentifier: certificateNickname
+      description: "The nickname (alias) of the client certificate in the key store
+                        to present to the directory server for SSL client authentication."
+  - id: saslOption
+    type: string
+    configuration:
+      longIdentifier: saslOption
+      description: "A name-value pair providing information to use when performing
+                        SASL authentication."
+
+collectors:
+  - id: rootdse.ldif
+    type: LDAP_SEARCH
+    zipParentPath: LDAP
+    configuration:
+      baseDN: ""
+      searchScope: 0
+      filter: "objectClass=*"
+      attributes: "+"
+  - id: monitor.ldif
+    type: LDAP_SEARCH
+    zipParentPath: LDAP
+    configuration:
+      baseDN: "cn=monitor"
+      searchScope: 2
+      filter: "objectClass=*"
+  - id: aci.ldif
+    type: LOCAL_DB_ACI_LDAP_SEARCH
+  - id: notificaiton_manager.ldif
+    type: NOTIFICATION_MANAGER_LDAP_SEARCH
+  - id: replication_domains.ldif
+    type: REPLICATION_DOMAIN_LDAP_SEARCH
+  - id: status
+    type: LDAP_COMMAND
+    zipParentPath: LDAP
+    configuration:
+      root: ${argument:serverRootArg}
+      unix_command: "/bin/status"
+      windows_command: "\\bat\\status.bat"
+      args: "--noPropertiesFile"
+  - id: replication.state
+    type: DUMP_REPLICATION_STATE
+    zipParentPath: LDAP
+  - id: extensions-list
+    type: EXTENSIONS_LIST
+    zipParentPath: SERVER
+  - id: baseline-to-active.dsconfig
+    type: CONFIG_DIFF_BASELINE
+    zipParentPath: CONFIG_DIFF
+  - id: postSetup-to-active.dsconfig
+    type: CONFIG_DIFF_POST_SETUP
+    zipParentPath: CONFIG_DIFF
+  - id: tmp
+    type: JAVA_IO_TMP_DIR_FILE_LIST
